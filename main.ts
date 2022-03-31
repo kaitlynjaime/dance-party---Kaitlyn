@@ -1,14 +1,21 @@
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-	
+    dancer.setFlag(SpriteFlag.Ghost, false)
+    dancer.x = arrowXs[1]
+
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-	
+    dancer.setFlag(SpriteFlag.Ghost, false)
+	dancer.x = arrowXs[0]
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-	
+    dancer.setFlag(SpriteFlag.Ghost, false)
+    dancer.x = arrowXs[2]
+
 })
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-	
+    dancer.setFlag(SpriteFlag.Ghost, false)
+    dancer.x = arrowXs[3]
+
 })
 function setUpStopper () {
     stopper = sprites.create(img`
@@ -265,6 +272,21 @@ let dancer = sprites.create(img`
     `, SpriteKind.Player)
 dancer.y = 100
 dancer.x = arrowXs[1]
+info.setScore(0)
+info.setLife(5)
 game.onUpdateInterval(500, function () {
-    dancer.x = arrowXs[0]
+    makeArrow()
+})
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function(sprite: Sprite, otherSprite: Sprite) {
+    
+    info.changeScoreBy(1)
+    otherSprite.destroy(effects.fire)
+    dancer.setFlag(SpriteFlag.Ghost, true)
+})
+
+sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Food, function(sprite: Sprite, otherSprite: Sprite) {
+
+    info.changeLifeBy(-1)
+    otherSprite.destroy(effects.disintegrate, 100)
 })
